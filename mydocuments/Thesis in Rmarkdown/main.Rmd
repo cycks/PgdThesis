@@ -3,8 +3,9 @@ title: \textbf{Examining The Effect of Padding on Facial Recognition Using Convo
 output:
   pdf_document:
     number_sections: TRUE
-    keep_tex: true
-    latex_engine: pdflatex # Ensure you're using a compatible LaTeX engine
+    keep_tex: TRUE
+    fig_caption: True
+    latex_engine: xelatex
 geometry: "left = 2.54cm, right = 2.54cm, top = 2.54cm, bottom = 2.54cm"
 fontsize: 12pt
 header-includes:
@@ -14,10 +15,14 @@ header-includes:
   - \usepackage{setspace}
   - \setstretch{2.0}
   - \usepackage{fancyhdr}
+  - \usepackage{ragged2e}
   - \usepackage{lastpage}
   - \usepackage{dcolumn}
+  - \usepackage{amsmath}  # For numberwithin
+  - \numberwithin{figure}{chapter}  # Number figures within chapters
   - \usepackage{natbib}\bibliographystyle{agsm}
   - \usepackage[nottoc, numbib]{tocbibind}
+documentclass: report
 bibliography: bibliography.bib
 ---
 
@@ -128,48 +133,44 @@ Facial recognition technology is the development of solutions that can match a f
 \centering
 \raggedright
 \newpage
+\normalsize
+\onehalfspacing
 \tableofcontents
 
 
+\onehalfspacing
+\large
 \newpage
+\listoffigures
 
-\begin{centering}
 
-{\bf List of Tables}
 
-\end{centering}
 
+\newpage
 \doublespacing
 \large
+\listoftables
+
+
 
 
 \newpage
-
-\begin{centering}
-
-{\bf List of Figures}
-
-\end{centering}
-
 \doublespacing
 \large
-
-
-\newpage
-
 \begin{centering}
-
 {\bf List of Abbreviations and Acronyms}
-
 \end{centering}
 
-\doublespacing
-\large
+
 
 \newpage
+\pagenumbering{arabic}
 
 ```{r intro, child = 'introduction.Rmd'}
 ```
-\pagenumbering{arabic}
 
+\newpage
+
+```{r litret, child = 'literature.Rmd'}
+```
 
