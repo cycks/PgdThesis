@@ -1,7 +1,0 @@
----
-title: ''
-output: pdf_document
----
-
-Waiting for the command to add the references...
-
