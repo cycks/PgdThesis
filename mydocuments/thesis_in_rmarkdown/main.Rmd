@@ -18,9 +18,12 @@ header-includes:
   - \usepackage{ragged2e}
   - \usepackage{lastpage}
   - \usepackage{dcolumn}
-  - \usepackage{natbib}\bibliographystyle{agsm}
   - \usepackage[nottoc, numbib]{tocbibind}
-bibliography: bibliography.bib
+  - \usepackage[fleqn]{amsmath}
+  - \setlength{\mathindent}{0pt}
+  - \usepackage{enumitem}
+  - \renewcommand{\theequation}{\thechapter.\arabic{equation}}
+documentclass: report
 ---
 
 ```{r setup, include=FALSE}
@@ -177,3 +180,7 @@ Facial recognition technology is the development of solutions that can match a f
 ```{r litret, child = 'literature.Rmd'}
 ```
 
+\newpage
+
+```{r methods, child = 'methodology.Rmd'}
+```

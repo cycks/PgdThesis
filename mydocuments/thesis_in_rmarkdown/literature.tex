@@ -82,10 +82,12 @@
 
 \section{Chapter Two}\label{chapter-two}
 
-\vspace{-1em}
+\vspace{-0.1em}
 
 \section*{Literature Review}\label{literature-review}
 \addcontentsline{toc}{section}{Literature Review}
+
+\vspace{-0.1em}
 
 \subsection{Introduction}\label{introduction}
 
@@ -795,5 +797,24 @@ Labelled Faces in the Wild dataset, and the YouTube Faces dataset. It
 follows that this architecture achieved an accuracy of 97.5\% in the
 Labelled Faces in the Wild dataset and a 91.4\% accuracy on the YouTube
 Faces dataset.
+
+\subsubsection{VGGFACE-16}\label{vggface-16}
+
+VGGFACE-16 is a facial recognition that was developed by Karen Simonyan
+and Andrew Zisserman from the University of Oxford (Koo et al., 2018).
+It comprises multiple sequential connected layers with each layer
+receiving output from the previous layer. Specifically, it is made up of
+16 layers where the first thirteen layers are convolution layers while
+the last three layers are fully connected layers. Critical to the
+discussion is the fact that the input image must have a dimension of 224
+by 224 by 3. The sixteen layers used by this facial architecture can be
+divided into five major groups. Each of these groups contains
+convolution layers, a relu activation function, maxpooling, kernel
+filters, strides and padding. A thorough explanation of this facial
+recognition architecture has been published by Koo et al., (2018). It is
+important to mention that like Google Facenet and DeepFace, VGGFACE-16
+was also tested on famous datasets such as the Labeled Faces in the Wild
+dataset. Specifically, the model recorded an accuracy of 99.13\% on the
+Labeled Faces in the Wild dataset.
 
 \end{document}

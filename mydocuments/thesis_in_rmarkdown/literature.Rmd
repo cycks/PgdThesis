@@ -20,9 +20,10 @@ header-includes:
 \justifying
 
 #	Chapter Two
-\vspace{-1em}
+\vspace{-0.1em}
 
 # Literature Review{-}
+\vspace{-0.1em}
 
 ##	Introduction
 

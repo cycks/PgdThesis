@@ -1,0 +1,179 @@
+---
+title: " "
+output: 
+  pdf_document:
+    number_sections: TRUE
+    keep_tex: TRUE
+    latex_engine: xelatex
+geometry: "left = 2.54cm, right = 2.54cm, top = 2.54cm, bottom = 2.54cm"
+fontsize: 12pt
+classoption: fleqn
+header-includes:
+  - \usepackage{float}
+  - \usepackage{sectsty}
+  - \usepackage{setspace}
+  - \setstretch{2.0}
+  - \usepackage{ragged2e}
+  - \setlength{\mathindent}{0pt}
+  - \usepackage{enumitem}
+  
+---
+
+\onehalfspacing
+\normalsize
+\justifying
+
+#	Chapter Three
+\vspace{-1em}
+
+# Methodology{-}
+
+##	Introduction
+|        This section discusses the theory behind neural networks by deriving the back propagation algorithm. The section also discusses techniques used in convolution neural networks by describing how CNNs extract data from images. Specifically, this section focuses on major techniques used in CNNs such as filtering, strides, padding, pooling and batch normalization.
+## Artificial Neural Networks
+|        Artificial neural networks is a machine learning technique that tries to imitate the intelligence of a human brain. The human brain contains neurons that are connected to one another through axons and dendrites. The connecting region between axons and dendrites is called a synapse. The strength of synaptic connections often changes due to changes in external stimuli, which in turn influence how learning occurs in the human brain (Agrawal and Singh, 2015). Like biological neurons, artificial neural networks contain computational units called neurons. These computational units are connected to one another through weights that perform the same role as synapses in biological neurons. An artificial neural network computes a function of the inputs by propagating the computed values from the input neurons to the output neuron(s) and using the weights as intermediate parameters. Learning occurs by changing the weights connecting the neurons.
+
+```{r ann, echo=F, out.width="80%", fig.cap="Artificial Neural Network.", fig.align='center', fig_caption= TRUE}
+knitr::include_graphics("img/ann.png")
+```
+
+|        The simplest form of a neural network is called a perceptron and includes a single input layer, an activation function, and the output layer. Consider the image shown in figure 1.0 above and the case of a binary response variable $(Y)$ with 1 is the presence of an observed parameter and 0 the absence of the observed parameter. The input layer contains predictor variables $(X_1, X_2, …, X_n)$ with weights $(W_1, W_2, \ldots, W_n)$, which are mapped to the output node Y using an activation function. The activation function takes in the computed probability of the function of the weights $W_i$ and predictor variable $X_i$ and produces a probability of the response variable being 1 or 0. The activation function then takes the predicted probability and produces an output 1 if the predicted probability is close to 1 and produces an output 0 if the predicted probability is close to 1. It follows that the perceptron neural network can be computed using the formula in equation 3.1 below.
+\begin{equation}
+\begin{aligned}
+\hat{Y} = \sum_{i=0}^{n} W_i X_i
+\end{aligned}
+\label{eq:equation 3.1}
+\end{equation}
+
+|        While equation 3.1 above  may work in a variety of settings, there are instances where we need to introduce a bias to a neural network for it to work accordingly (Agrawal and Singh, 2015). The mentioned bias could be compared to penalizing a regression model. Basically, we introduce a bias neuron that shifts the line of fit to the right or left depending on the original position of the line of fit. Another way to think about biases is simply by considering any linear function, y = mx + b. Let's say you are using y to approximate some linear function z. If z has a non-zero z-intercept, and you have no bias in the equation for y (i.e. y = mx), then y can never perfectly fit z. Similarly, if the neurons in your network have no bias terms, then it can be harder for your network to approximate some functions. The figure 3.2 below shows an example of neural network architecture with a single bias neuron.
+
+```{r ann_with_bias, echo=F, out.width="80%", fig.cap="Artificial Neural Network.", fig.align='center', fig_caption= TRUE}
+knitr::include_graphics("img/ann_with_bias.png")
+```
+
+Thus, the perceptron of a single layer neural network is shown in the formula 3.2 below. The output is represented by $Y_hat$, which is equal to the sum of weight $W(W_1, W_2, …, W_n)$ multiplied by the predictor variables $X(X_1, X_2, …, X_n)$ plus the bias neuron $b$.
+\begin{equation}
+\begin{aligned}
+\hat{Y} = \sum_{i=0}^{n} W_i X_i + b
+\end{aligned}
+\label{eq:equation 3.2}
+\end{equation}
+
+## Deriving the Backpropagation Algorithm
+Let $W_{ji}^L$ be the weight matrices denoting the value of the synaptic weight that connects the $j^{th}$ neuron of layer $(L)$ to the $i^{th}$ neuron of layer $(L − 1)$. Consider the image in the figure 3.3 below
+
+\begin{enumerate}[label=\Roman*]
+\item $W_{ji}^{(3)}$ Is the synaptic weight connecting the $j^{th}$ neuron of output layer to the $i^{th}$ neuron of layer 2.
+\item $W_{ji}^{(2)}$ Is the synaptic weight connecting the $j^{th}$ neuron of hidden layer 2 to the $i^{th}$ neuron of layer 1.
+\item $W_{ji}^{(1)}$ Is the synaptic weight connecting the $j^{th}$ neuron of hidden layer 1 to the $i^{th}$ signal of the input layer.
+\end{enumerate}
+
+```{r ann_proof, echo=F, out.width="80%", fig.cap="Artificial Neural Network.", fig.align='center', fig_caption= TRUE}
+knitr::include_graphics("img/ann_proof.png")
+```
+Let $I_{j}^L$ be vectors whose elements denote the weighted inputs of the $j^{th}$ neuron of layer $L$ and are defined as the following.
+
+\vspace{-1em} 
+\begin{equation}
+\begin{aligned}
+I_{j}^1 = \sum_{i=0}^{n} W_{i}^1 x_i \iff I_{j}^1 = W_{1,0}^1*x_0 + W_{1,1}^1*x_1 + \cdot + W_{1,n}^1*x_n
+\label{eq:equation 3.3}
+\end{aligned}
+\end{equation}
+\vspace{-2em} 
+
+\begin{equation}
+\begin{aligned}
+I_{j}^2 = \sum_{i=0}^{n} W_{i}^2 x_i \iff I_{j}^2 = W_{1,0}^2*x_0 + W_{1,1}^2*x_1 + \cdot + W_{1,n}^2*x_n
+\label{eq:equation 3.4}
+\end{aligned}
+\end{equation}
+\vspace{-2em}
+
+\begin{equation}
+\begin{aligned}
+I_{j}^3 = \sum_{i=0}^{n} W_{i}^3 x_i \iff I_{j}^3 = W_{1,0}^3*x_0 + W_{1,1}^3*x_1 + \cdot + W_{1,n}^3*x_n
+\label{eq:equation 3.5}
+\end{aligned}
+\end{equation}
+\vspace{-1em}
+
+Let $Y_{j}^L$ be vectors whose elements denote the output of the $j^{th}$ neuron related to the layer $L$ and are defined as:
+\vspace{-1em}
+\begin{equation}
+\begin{aligned}
+Y_{j}^1 = g(I_{j}^1)
+\label{eq:equation 3.6}
+\end{aligned}
+\end{equation}
+\vspace{-2em}
+
+\begin{equation}
+\begin{aligned}
+Y_{j}^2 = g(I_{j}^2)
+\label{eq:equation 3.7}
+\end{aligned}
+\end{equation}
+\vspace{-2em}
+
+\begin{equation}
+\begin{aligned}
+Y_{j}^3 = g(I_{j}^3)
+\label{eq:equation 3.8}
+\end{aligned}
+\end{equation}
+\vspace{-1em}
+
+Another important aspect of the backpropagation is the chain rule, which is defined as: $\frac{d}{dx} f(g(x)) = f'(g(x)) \cdot g'(x)$. The next step of deriving the backpropagation algorithm involves defining a function that can represent the approximation error. It is important to highlight that this function will measure the deviation between the actual values and the predicted values. As a result, the squared error function is employed to measure the deviation in question. This error function will be defined as shown in equation 3.9 below.
+
+\vspace{-1em}
+\begin{equation}
+\begin{aligned}
+E(k) = \frac{1}{2} \sum_{j=1}^{n3} \left( d_j(k) - y_j^3(k) \right)^2
+\label{eq:equation 3.9}
+\end{aligned}
+\end{equation}
+\vspace{-1em}
+
+Where $y_{j}^3 (k)$  is the value produced by the $j^{th}$ output neuron of the network for the $k^{th}$ training sample, while $d_j (k)$ is the corresponding desired value. If there are $p$ training samples the performance of the backpropagation algorithm would be calculated using the mean squared error defined by
+
+\vspace{-1em}
+\begin{equation}
+\begin{aligned}
+E_m = \frac{1}{p} \sum_{k=1}^{p} E(k)
+\label{eq:equation 3.10}
+\end{aligned}
+\end{equation}
+\vspace{-1em}
+
+Where $E(k)$ is the squared error obtained in equation 3.9. In order to communicate the derivation of the backpropagation algorithm the process will be divided into two parts. The first part will focus on the synaptic adjustment of weight matrix $w_{ji}^(3)$, which represents the output layer. The second part will focus on adjusting intermediate layers $w_{ji}^(2)$ and $w_{ji}^(1)$.
+**Adjusting the Synaptic Weights of the Output Layer**
+|        Prior to diving into the mathematics of deriving the backpropagation algorithm, it should be noted that the purpose of the training process in output layer is to minimize the error between predicted and actual values. This will be achieved by minimizing the difference between the predicted and actual values. In short, the objective is to obtain an optimal $w^*$ so that the squared error ${E(w^*)}$ of the whole sample set is as low as possible. Using the chain rule, we differentiate equation 3.9 as shown in equation 3.11 below.
+
+\vspace{-1em}
+\begin{equation}
+\begin{aligned}
+\nabla E^3 = \frac{\partial E}{\partial W_{ji}^{(3)}} = \frac{\partial E}{\partial Y_j^{(3)}} \cdot \frac{\partial Y_j^{(3)}}{\partial I_j^{(3)}} \cdot \frac{\partial I_j^{(3)}}{\partial W_{ji}^{(3)}}
+\label{eq:equation 3.11}
+\end{aligned}
+\end{equation}
+\vspace{-1em}
+
+
+\vspace{-1em}
+\begin{equation}
+\begin{aligned}
+\frac{\partial I_j^{(3)}}{\partial W_{ji}^{(3)}} = Y_i^{(2)} \quad \text{(Obtained from the partial derivative of equation 3.5 with respect to \( W_{ji} \))}
+\label{eq:equation 3.12}
+\end{aligned}
+\end{equation}
+\vspace{-1em}
+
+\vspace{-1em}
+\begin{equation}
+\begin{aligned}
+\frac{\partial Y_j^{(3)}}{\partial I_j^{(3)}} = g'(I_j^{(3)}) \quad \text{(Obtained from equation 3.8)}
+\label{eq:equation 3.13}
+\end{aligned}
+\end{equation}
+\vspace{-1em}
