@@ -1,0 +1,32 @@
+---
+title: \textbf{Examining The Effect of Padding on Facial Recognition Using Convolution Neural Networks}
+output:
+  pdf_document:
+    number_sections: TRUE
+    keep_tex: TRUE
+    fig_caption: TRUE
+    latex_engine: xelatex
+geometry: "left = 2.54cm, right = 2.54cm, top = 2.54cm, bottom = 2.54cm"
+fontsize: 12pt
+header-includes:
+  - \usepackage{float}
+  - \usepackage{sectsty}
+  - \usepackage{paralist}
+  - \usepackage{setspace}
+  - \setstretch{2.0}
+  - \usepackage{fancyhdr}
+  - \usepackage{ragged2e}
+  - \usepackage{lastpage}
+  - \usepackage{dcolumn}
+  - \usepackage[nottoc, numbib]{tocbibind}
+  - \usepackage{enumitem}
+  - \renewcommand{\theequation}{\thechapter.\arabic{equation}}
+documentclass: report
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Agrawal, A. K., Singh, N. Y. (2015). Evaluation of Face Recognition Methods in
+|        Unconstrained Environments. International Conference on Intelligent 
+|        Computing, Communication & Convergence. Bhubaneswar, Odisha, India. 

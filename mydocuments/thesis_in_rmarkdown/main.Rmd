@@ -4,7 +4,7 @@ output:
   pdf_document:
     number_sections: TRUE
     keep_tex: TRUE
-    fig_caption: True
+    fig_caption: TRUE
     latex_engine: xelatex
 geometry: "left = 2.54cm, right = 2.54cm, top = 2.54cm, bottom = 2.54cm"
 fontsize: 12pt
@@ -19,16 +19,17 @@ header-includes:
   - \usepackage{lastpage}
   - \usepackage{dcolumn}
   - \usepackage[nottoc, numbib]{tocbibind}
-  - \usepackage[fleqn]{amsmath}
-  - \setlength{\mathindent}{0pt}
   - \usepackage{enumitem}
   - \renewcommand{\theequation}{\thechapter.\arabic{equation}}
 documentclass: report
 ---
 
-```{r setup, include=FALSE}
+
+```{r setup, include=FALSE} 
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
 
 
 \allsectionsfont{\centering}
@@ -37,12 +38,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \pagenumbering{gobble}
 
-\begin{centering}
+\maketitle
 
+\begin{titlepage}
+\centering
+\Large \textbf{\ Examining The Effect of Padding on Facial Recognition Using Convolution Neural Networks}
+\vspace*{\fill}
 ```{r uni_logo, echo=F, out.width="80%"}
 knitr::include_graphics("img/jkuatlogo.png")
 ```
-\vspace{0.3cm}
+\vspace{1cm}
 
 \normalsize
 Wycliffe Atswenje Sikolia \vspace{0.3cm}
@@ -51,7 +56,8 @@ A Research Proposal Submitted in Partial Fulfillment of The Requirements for The
 
 2024 
 
-\end{centering}
+\vspace*{\fill}
+\end{titlepage}
 
 \newpage
 
@@ -180,7 +186,10 @@ Facial recognition technology is the development of solutions that can match a f
 ```{r litret, child = 'literature.Rmd'}
 ```
 
+
 \newpage
+
 
 ```{r methods, child = 'methodology.Rmd'}
 ```
+
