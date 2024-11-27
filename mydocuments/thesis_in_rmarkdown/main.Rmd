@@ -18,6 +18,11 @@ header-includes:
   - \usepackage{ragged2e}
   - \usepackage{lastpage}
   - \usepackage{dcolumn}
+  - \usepackage{titlesec}
+  - \titlespacing*{\section}{-10pt}{-10pt}{-10pt}
+  - \titlespacing*{\subsection}{0pt}{0pt}{0pt}
+  - \titlespacing*{\subsubsection}{0pt}{0pt}{0pt}
+  - \titlespacing*{\section}{0pt}{0pt}{0pt}
   - \usepackage[nottoc, numbib]{tocbibind}
   - \usepackage{enumitem}
   - \renewcommand{\theequation}{\thechapter.\arabic{equation}}
@@ -28,8 +33,6 @@ documentclass: report
 ```{r setup, include=FALSE} 
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-
 
 
 \allsectionsfont{\centering}
@@ -149,15 +152,10 @@ Facial recognition technology is the development of solutions that can match a f
 \listoffigures
 
 
-
-
-
 \newpage
 \onehalfspacing
 \normalsize
 \listoftables
-
-
 
 
 \newpage
@@ -193,3 +191,9 @@ Facial recognition technology is the development of solutions that can match a f
 ```{r methods, child = 'methodology.Rmd'}
 ```
 
+
+\newpage
+
+
+```{r refs, child = 'references.Rmd'}
+```
