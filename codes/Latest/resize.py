@@ -56,7 +56,3 @@ destination_folder_path = './komnet2'
 # Run the function to resize images
 resize_images_in_folder(source_folder_path, destination_folder_path)
 
-# aws s3 cp cycks_with_padding.py s3://bucket-fulani
-# cp -r ./newpgd/komnet ./modifiedPGD
-# aws s3 cp ~/home/sikolia/Desktop/PgdThesis/codes/newpgd/CorrectedCode/cycks_with_padding.py s3://bucket-fulani
-# aws s3 cp s3://bucket-fulani/cycks_with_padding.py   /modifiedPGD

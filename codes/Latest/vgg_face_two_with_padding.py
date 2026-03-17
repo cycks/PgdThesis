@@ -1,5 +1,6 @@
 import sys
 import os
+import zipfile
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
@@ -26,17 +27,43 @@ try:
 
     print(f"--- Starting execution: {time.ctime()} ---")
 
-    # [Data Loading Logic - Keep your existing block here]
-    folder_with_zipped_data = './komnet2'
+    # --- SHARED DATA LOGIC ---
+    zip_filename = 'komnet.zip'
+    extraction_dir = './shared_komnet_data'
+
+    # Check if folder exists; if not, try to unzip
+    if not os.path.exists(extraction_dir):
+        if os.path.exists(zip_filename):
+            print(f"Found {zip_filename}. Extracting to {extraction_dir}...")
+            with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
+                zip_ref.extractall(extraction_dir)
+            print("Extraction complete.")
+        else:
+            print(f"CRITICAL ERROR: Folder {extraction_dir} and {zip_filename} not found.")
+            sys.exit(1)
+    else:
+        print(f"Using existing shared directory: {extraction_dir}")
+
+    # --- DATA LOADING ---
     image_size = (256, 256)
     batch_size = 32
     rescale = tf.keras.Sequential([layers.Rescaling(1./255)])
 
     initial_train_ds = tf.keras.utils.image_dataset_from_directory(
-        folder_with_zipped_data, validation_split=0.2, subset="training", seed=123, image_size=image_size, batch_size=batch_size
+        extraction_dir, 
+        validation_split=0.2, 
+        subset="training", 
+        seed=123, 
+        image_size=image_size, 
+        batch_size=batch_size
     )
     val_ds = tf.keras.utils.image_dataset_from_directory(
-        folder_with_zipped_data, validation_split=0.2, subset="validation", seed=123, image_size=image_size, batch_size=batch_size
+        extraction_dir, 
+        validation_split=0.2, 
+        subset="validation", 
+        seed=123, 
+        image_size=image_size, 
+        batch_size=batch_size
     )
 
     class_names = initial_train_ds.class_names
@@ -54,16 +81,20 @@ try:
     val_ds = val_ds.map(lambda x, y: (rescale(x), y)).prefetch(buffer_size=AUTOTUNE)
     test_ds = test_ds.map(lambda x, y: (rescale(x), y)).prefetch(buffer_size=AUTOTUNE)
 
+    # --- ARCHITECTURE ---
     def create_vgg_face_with_padding(input_shape=(256, 256, 3), num_classes_arg=num_classes):
         model = models.Sequential(name="VGG_Face_With_Padding")
+        # Block 1
         model.add(Conv2D(64, (3, 3), activation='relu', input_shape=input_shape, padding='same'))
         model.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
         model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+        # Block 2
         model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
         model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
         model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+        # Flatten & Dense
         model.add(Flatten())
-        model.add(Dense(1024, activation='relu')) # Reduced size slightly for memory stability
+        model.add(Dense(1024, activation='relu')) 
         model.add(Dropout(0.5))
         model.add(Dense(num_classes_arg, activation='softmax'))
         return model
@@ -72,13 +103,14 @@ try:
         model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
         
         print(f"\n--- Training {model.name} ---")
+        model.summary()
         start_time = time.time()
         model.fit(train_ds, validation_data=val_ds, epochs=10, verbose=verbose_setting)
         print(f"Training completed in {(time.time() - start_time)/60:.2f} minutes.")
 
         # --- ADVANCED EVALUATION ---
         y_true = []
-        y_probs = [] # Raw probabilities for ROC
+        y_probs = []
 
         print("\nCollecting predictions for advanced metrics...")
         for images, labels in test_ds:
@@ -98,7 +130,7 @@ try:
         cm = confusion_matrix(y_true, y_pred)
         plt.figure(figsize=(10, 8))
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
-        plt.title(f'Vgg with Padding Confusion Matrix: {model.name}')
+        plt.title(f'Vgg with Padding Confusion Matrix')
         plt.ylabel('Actual')
         plt.xlabel('Predicted')
         plt.savefig('Vgg_with_padding_confusion_matrix.png')
@@ -137,4 +169,3 @@ finally:
     sys.stderr = original_stderr
     log_file.close()
     print(f"Logging complete. Results in {log_file_path}")
-
