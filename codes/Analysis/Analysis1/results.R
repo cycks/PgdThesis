@@ -1,18 +1,40 @@
-setwd("~/Desktop/PgdThesis/codes/Analysis")
+setwd("~/Desktop/PgdThesis/codes/Analysis/Analysis1")
 libs <- c("dplyr", "magrittr", "ggplot2", "readr", "caret", "tidyr", "GGally",
-          "survival", "data.table",  "plotly", "lubridate", "mice")
+          "survival", "data.table",  "plotly", "lubridate", "tidyverse")
 
-install_or_load_pack <- function(pack){
-  create.pkg <- pack[!(pack %in% installed.packages()[, "Package"])]
-  if (length(create.pkg))
-    install.packages(create.pkg, dependencies = TRUE)
-  lapply(libs, require, character.only = T, warn.conflicts=T, quietly=T)
-  #I know I should be using purr here, but this is before the Tidyverse is loaded. I know you Tidyverse trend setters will have me here.
+load_and_install <- function(packages) {
+  new_packages <- packages[!(packages %in% installed.packages()[, "Package"])]
+  if (length(new_packages)) install.packages(new_packages)
+  lapply(packages, library, character.only = TRUE)
 }
-install_or_load_pack(libs)
+load_and_install(libs)
 
 
 ################################################################################
+
+parse_metrics_to_df <- function(metrics_string, model_label) {
+  # 1. Extract numbers
+  numeric_values <- as.numeric(unlist(str_extract_all(metrics_string, "\\d+\\.\\d+")))
+  
+  # 2. Extract and clean names (handles hyphens like ROC-AUC)
+  metric_names <- unlist(str_extract_all(metrics_string, "[A-Za-z0-9\\s\\-]+(?=:)")) %>%
+    str_trim() %>%
+    str_replace_all("\\s+", "_")
+  
+  # 3. Create Wide Dataframe
+  metrics_df_wide <- as.data.frame(t(numeric_values))
+  colnames(metrics_df_wide) <- metric_names
+  
+  # 4. Pivot to Long and use model_label as the value column name to allow merging
+  metrics_df_long <- metrics_df_wide %>%
+    as_tibble(.name_repair = "minimal") %>%
+    pivot_longer(cols = everything(), names_to = "Metric", values_to = model_label)
+  
+  return(metrics_df_long)
+}
+
+
+
 plot_classification_metrics <- function(df, model_name) {
   
   # 1. Reshape the data from wide to long format
@@ -45,114 +67,102 @@ plot_classification_metrics <- function(df, model_name) {
   
   return(plot)
 }
+################################################################################
+Analysis1_Cycks_with_padding <- read_csv("Results3/Cycks_With_Padding.csv")
+Analysis1_raw_input_1 <- "Accuracy: 0.0298 | Balanced Acc: 0.0308 | Log Loss: 3.8865
+Precision: 0.0202 | Recall: 0.0298 | F1: 0.0156 | ROC-AUC: 0.5120"
+
+Analysis1_df1 <- parse_metrics_to_df(Analysis1_raw_input_1,
+                                     "Analysis1_Cycks_with_padding")
+Analysis1_p1 <- plot_classification_metrics(Analysis1_Cycks_with_padding,
+                                            "Analysis1_Cycks_with_padding")
+Analysis1_p1
 
 
 ################################################################################
-Cycks_without_padding <- read_csv("Results3/Cycks_Without_Padding.csv")
+Analysis1_Cycks_without_padding <- read_csv("Results3/Cycks_Without_Padding.csv")
 #View(Cycks_without_padding)
+Analysis1_raw_input_2 <- "Accuracy: 0.9135 | Balanced Acc: 0.8947 | Log Loss: 0.3991
+Precision: 0.9223 | Recall: 0.9135 | F1: 0.9110 | ROC-AUC: 0.9988"
 
-Cycks_without_padding_plot <- plot_classification_metrics(Cycks_without_padding,
-                                                     "Cycks_without_padding")
-Cycks_without_padding_plot
+# Using your existing function
+Analysis1_df2 <- parse_metrics_to_df(Analysis1_raw_input_2,
+                                     "Analysis1_Cycks_without_padding")
 
-Cycks_without_padding_metrics <- data.frame(
-  Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
-             "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  Cycks_Without_Padding = c(0.9135, 0.8947, 0.3991, 0.9223, 0.9135, 0.9110, 0.9988)
-)
-print(Cycks_without_padding_metrics)
+Analysis1_p2 <- plot_classification_metrics(Analysis1_Cycks_without_padding,
+                                            "Analysis1_Cycks_without_padding")
+Analysis1_p2
 
-################################################################################
-Cycks_with_padding <- read_csv("Results3/Cycks_With_Padding.csv")
-#View(Cycks_with_padding)
-
-Cycks_with_padding_Plot <- plot_classification_metrics(Cycks_with_padding,
-                                                     "Cycks_with_padding")
-Cycks_with_padding_Plot
-
-# 1. Create the data frame for the new model results
-Cycks_with_padding_metrics <- data.frame(
-  Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
-             "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  Cycks_with_padding = c(0.0298, 0.0308, 3.8865, 0.0202, 0.0298, 0.0156, 0.5120)
-)
-
-# 2. View the data set
-print(Cycks_with_padding_Metrics)
-################################################################################
-Vgg_without_padding <- read_csv("Results3/Vgg_without_padding.csv")
-# View(Vgg_without_padding)
-
-Vgg_without_padding_Plot <- plot_classification_metrics(Vgg_without_padding,
-                                                  "Vgg_without_padding")
-Vgg_without_padding_Plot
-
-Vgg_without_padding_metrics <- data.frame(
-  Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
-             "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  Vgg_without_padding = c(0.9511, 0.9456, 0.2339, 0.9528, 0.9511, 0.9512,
-                          0.9992)
-)
-
-# 2. View the data set
-print(Vgg_without_padding_metrics)
 
 ################################################################################
-Vgg_with_padding <- read_csv("Results3/Vgg_with_padding.csv")
+Analysis1_Vgg_without_padding <- read_csv("Results3/Vgg_without_padding.csv")
+
+Analysis1_raw_input_3 <- "Accuracy: 0.9511 | Balanced Acc: 0.9456 | Log Loss: 0.2339
+Precision: 0.9528 | Recall: 0.9511 | F1: 0.9512 | ROC-AUC: 0.9992"
+
+
+# Using your existing function
+Analysis1_df3 <- parse_metrics_to_df(Analysis1_raw_input_3,
+                                     "Analysis1_Vgg_without_padding")
+print(Analysis1_df3)
+Analysis1_p3 <- plot_classification_metrics(Analysis1_Vgg_without_padding,
+                                            "Analysis1_Vgg_without_padding")
+Analysis1_p3
+
+################################################################################
+Analysis1_Vgg_with_padding <- read_csv("Results3/Vgg_with_padding.csv")
 # View(Vgg_with_padding)
 
-Vgg_with_padding_Plot <- plot_classification_metrics(Vgg_with_padding,
-                                                        "Vgg_with_padding")
-Vgg_with_padding_Plot
+Analysis1_raw_input_4 <- "Accuracy: 0.9578 | Balanced Acc: 0.9518 | Log Loss: 0.2025
+Precision: 0.9592 | Recall: 0.9578 | F1: 0.9579 | ROC-AUC: 0.9994"
 
-Vgg_with_padding_metrics <- data.frame(
-  Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
-             "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  Vgg_with_padding = c(0.9578, 0.9518, 0.2025, 0.9592, 0.9578, 0.9579,
-                          0.9994)
-)
 
-# 2. View the data set
-print(Vgg_with_padding_metrics)
+# Using your existing function
+Analysis1_df4 <- parse_metrics_to_df(Analysis1_raw_input_4,
+                                     "Analysis1_Vgg_with_padding")
+print(Analysis1_df4)
+Analysis1_p4 <- plot_classification_metrics(Analysis1_Vgg_without_padding,
+                                            "Analysis1_Vgg_without_padding")
+Analysis1_p4
 ################################################################################
-reduced_cycks_without_padding <- read_csv("Results3/reduced_cycks_without_padding.csv")
-# View(reduced_cycks_without_padding)
+Analysis1_red_cycks_without_padding <- read_csv("Results3/red_cycks_without_padding.csv")
+# View(red_cycks_without_padding)
 
-reduced_cycks_without_padding_Plot <- plot_classification_metrics(reduced_cycks_without_padding,
-                                                     "reduced_cycks_without_padding")
-reduced_cycks_without_padding_Plot
+red_cycks_without_padding_Plot <- plot_classification_metrics(red_cycks_without_padding,
+                                                     "red_cycks_without_padding")
+red_cycks_without_padding_Plot
 
-reduced_cycks_without_padding_metrics <- data.frame(
+red_cycks_without_padding_metrics <- data.frame(
   Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
              "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  reduced_cycks_without_padding = c(0.9726, 0.9607, 0.0808, 0.9744, 0.9726, 0.9724,
+  red_cycks_without_padding = c(0.9726, 0.9607, 0.0808, 0.9744, 0.9726, 0.9724,
                           0.9999)
 )
 
 # 2. View the data set
-print(reduced_cycks_without_padding_metrics)
+print(red_cycks_without_padding_metrics)
 ################################################################################
-reduced_cycks_with_padding <- read_csv("Results3/reduced_cycks_with_padding.csv")
-# View(reduced_cycks_with_padding)
-reduced_cycks_with_padding_Plot <- plot_classification_metrics(reduced_cycks_with_padding,
-                                                                  "reduced_cycks_with_padding")
-reduced_cycks_with_padding_Plot
+red_cycks_with_padding <- read_csv("Results3/red_cycks_with_padding.csv")
+# View(red_cycks_with_padding)
+red_cycks_with_padding_Plot <- plot_classification_metrics(red_cycks_with_padding,
+                                                                  "red_cycks_with_padding")
+red_cycks_with_padding_Plot
 
-reduced_cycks_with_padding_metrics <- data.frame(
+red_cycks_with_padding_metrics <- data.frame(
   Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
              "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  reduced_cycks_with_padding = c(0.9726, 0.9607, 0.0808, 0.9744, 0.9726, 0.9724,
+  red_cycks_with_padding = c(0.9726, 0.9607, 0.0808, 0.9744, 0.9726, 0.9724,
                           0.9999)
 )
 
 # 2. View the data set
-print(reduced_cycks_with_padding_metrics)
+print(red_cycks_with_padding_metrics)
 
 
 ################################################################################
 list_of_dfs <- list(
-  reduced_cycks_with_padding_metrics,
-  reduced_cycks_without_padding_metrics,
+  red_cycks_with_padding_metrics,
+  red_cycks_without_padding_metrics,
   Vgg_with_padding_metrics,
   Vgg_without_padding_metrics,
   Cycks_with_padding_metrics,

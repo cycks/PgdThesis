@@ -20,7 +20,8 @@ load_and_install(libs)
 # HELPER FUNCTIONS
 # ==============================================================================
 
-# Function to parse metric strings into a long-format dataset for a specific model
+# Function to parse metric strings into a long-format data set for a specific
+# model
 parse_metrics_to_df <- function(metrics_string, model_label) {
   # 1. Extract numbers
   numeric_values <- as.numeric(unlist(str_extract_all(metrics_string, "\\d+\\.\\d+")))
@@ -76,37 +77,38 @@ Cycks_with_padding <- read_csv("Cycks_With_Padding.csv")
 raw_input_1 <- "Accuracy: 0.8816 | Balanced Acc: 0.8818 | Log Loss: 0.4588 | Precision: 0.8879 | Recall: 0.8816 | F1: 0.8818 | ROC-AUC: 0.9969"
 df1 <- parse_metrics_to_df(raw_input_1, "Cycks_With_Padding")
 p1 <- plot_classification_metrics(Cycks_with_padding, "Cycks_With_Padding")
+p1
 
 # Model 2: Cycks Without Padding
 Cycks_without_padding <- read_csv("Cycks_Without_Padding.csv")
 raw_input_2 <- "Accuracy: 0.9830 | Balanced Acc: 0.9831 | Log Loss: 0.0669 | Precision: 0.9837 | Recall: 0.9830 | F1: 0.9830 | ROC-AUC: 1.0000"
 df2 <- parse_metrics_to_df(raw_input_2, "Cycks_Without_Padding")
 p2 <- plot_classification_metrics(Cycks_without_padding, "Cycks_Without_Padding")
-
+p2
 # Model 3: VGG Without Padding
 Vgg_without_padding <- read_csv("Vgg_without_padding.csv")
 raw_input_3 <- "Accuracy: 0.9580 | Balanced Acc: 0.9578 | Log Loss: 0.2283 | Precision: 0.9587 | Recall: 0.9580 | F1: 0.9581 | ROC-AUC: 0.9994"
 df3 <- parse_metrics_to_df(raw_input_3, "VGG_Without_Padding")
 p3 <- plot_classification_metrics(Vgg_without_padding, "VGG_Without_Padding")
-
+p3
 # Model 4: VGG With Padding
 Vgg_with_padding <- read_csv("Vgg_with_padding.csv")
 raw_input_4 <- "Accuracy: 0.9525 | Balanced Acc: 0.9524 | Log Loss: 0.2470 | Precision: 0.9536 | Recall: 0.9525 | F1: 0.9525 | ROC-AUC: 0.9993"
 df4 <- parse_metrics_to_df(raw_input_4, "VGG_With_Padding")
 p4 <- plot_classification_metrics(Vgg_with_padding, "VGG_With_Padding")
-
+p4
 # Model 5: Red Cycks Without Padding
 Red_cycks_without_padding <- read_csv("Red_cycks_without_padding.csv")
 raw_input_5 <- "Accuracy: 0.9641 | Balanced Acc: 0.9648 | Log Loss: 0.1158 | Precision: 0.9671 | Recall: 0.9641 | F1: 0.9642 | ROC-AUC: 0.9999"
 df5 <- parse_metrics_to_df(raw_input_5, "Red_Cycks_Without_Padding")
 p5 <- plot_classification_metrics(Red_cycks_without_padding, "Red_Cycks_Without_Padding")
-
+p5
 # Model 6: Red Cycks With Padding
 Red_cycks_with_padding <- read_csv("Red_cycks_with_padding.csv")
 raw_input_6 <- "Accuracy: 0.9736 | Balanced Acc: 0.9738 | Log Loss: 0.0896 | Precision: 0.9760 | Recall: 0.9736 | F1: 0.9739 | ROC-AUC: 0.9999"
 df6 <- parse_metrics_to_df(raw_input_6, "Red_Cycks_With_Padding")
 p6 <- plot_classification_metrics(Red_cycks_with_padding, "Red_Cycks_With_Padding")
-
+p6
 # ==============================================================================
 # MERGING & GLOBAL COMPARISON
 # ==============================================================================
@@ -152,9 +154,89 @@ log_loss_plot <- plot_data %>%
   labs(title = "Model Comparison: Log Loss", x = "Model", y = "Log Loss Value") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+
+# ==============================================================================
+# INDIVIDUAL METRIC COMPARISON PLOTS
+# ==============================================================================
+
+# 1. Create a helper function for standardized individual metric plots
+plot_single_metric <- function(data, metric_name, fill_color = "steelblue") {
+  
+  plot_df <- data %>% filter(Metric == metric_name)
+  
+  ggplot(plot_df, aes(x = reorder(Model, -Value), y = Value)) +
+    geom_bar(stat = "identity", fill = fill_color, alpha = 0.8) +
+    geom_text(aes(label = sprintf("%.4f", Value)), 
+              vjust = -0.5, size = 3.5, fontface = "bold") +
+    theme_minimal() +
+    labs(
+      title = paste("Model Comparison:", metric_name),
+      subtitle = paste("Evaluation of", metric_name, "across all model configurations"),
+      x = "Model Architecture",
+      y = paste(metric_name, "Score")
+    ) +
+    scale_y_continuous(limits = c(0, 1.1)) + 
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid.major.x = element_blank()
+    )
+}
+
 # ==============================================================================
 # DISPLAY RESULTS
 # ==============================================================================
-print(performance_plot)
+
 print(log_loss_plot)
-print(combined_metrics_clean)
+
+
+
+# ==============================================================================
+# INDIVIDUAL METRIC COMPARISON PLOTS
+# ==============================================================================
+
+# 1. Create a helper function for standardized individual metric plots
+plot_single_metric <- function(data, metric_name, fill_color = "steelblue") {
+  
+  plot_df <- data %>% filter(Metric == metric_name)
+  
+  ggplot(plot_df, aes(x = reorder(Model, -Value), y = Value)) +
+    geom_bar(stat = "identity", fill = fill_color, alpha = 0.8) +
+    geom_text(aes(label = sprintf("%.4f", Value)), 
+              vjust = -0.5, size = 3.5, fontface = "bold") +
+    theme_minimal() +
+    labs(
+      title = paste("Model Comparison:", metric_name),
+      subtitle = paste("Evaluation of", metric_name, "across all model configurations"),
+      x = "Model Architecture",
+      y = paste(metric_name, "Score")
+    ) +
+    scale_y_continuous(limits = c(0, 1.1)) + 
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid.major.x = element_blank()
+    )
+}
+
+# 2. Generate the three separate plots
+# (Uses the 'plot_data' object from our previous consolidated script)
+
+# Plot A: Accuracy
+accuracy_plot <- plot_single_metric(plot_data, "Accuracy", "#2E86C1")
+print(accuracy_plot)
+
+# Plot B: Precision
+precision_plot <- plot_single_metric(plot_data, "Precision", "#239B56")
+print(precision_plot)
+
+# Plot C: Recall
+recall_plot <- plot_single_metric(plot_data, "Recall", "#D35400")
+print(recall_plot)
+
+
+# Plot C: ROC-AUC
+ROC_AUC_plot <- plot_single_metric(plot_data, "ROC-AUC", "#8E44AD")
+print(ROC_AUC_plot)
+
+# Plot C: F1-Score
+F1_Score_plot <- plot_single_metric(plot_data, "F1", "#C0392B") 
+print(F1_Score_plot)
