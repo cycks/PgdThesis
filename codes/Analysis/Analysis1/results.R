@@ -13,22 +13,29 @@ load_and_install(libs)
 ################################################################################
 
 parse_metrics_to_df <- function(metrics_string, model_label) {
-  # 1. Extract numbers
-  numeric_values <- as.numeric(unlist(str_extract_all(metrics_string, "\\d+\\.\\d+")))
+  # 1. Split by pipe to isolate each metric pair
+  pairs <- unlist(strsplit(metrics_string, "\\|"))
   
-  # 2. Extract and clean names (handles hyphens like ROC-AUC)
-  metric_names <- unlist(str_extract_all(metrics_string, "[A-Za-z0-9\\s\\-]+(?=:)")) %>%
-    str_trim() %>%
-    str_replace_all("\\s+", "_")
+  # 2. Extract names (before colon) and values (numbers)
+  metric_names <- str_trim(sub(":.*", "", pairs))
+  # Standardize names immediately to prevent merge mismatches
+  metric_names <- case_when(
+    metric_names == "Balanced Acc" ~ "Balanced_Acc",
+    metric_names == "Log Loss"     ~ "Log_Loss",
+    metric_names == "F1"           ~ "F1",
+    TRUE ~ metric_names
+  )
   
-  # 3. Create Wide Dataframe
-  metrics_df_wide <- as.data.frame(t(numeric_values))
-  colnames(metrics_df_wide) <- metric_names
+  numeric_values <- as.numeric(str_extract(pairs, "\\d+\\.\\d+"))
   
-  # 4. Pivot to Long and use model_label as the value column name to allow merging
-  metrics_df_long <- metrics_df_wide %>%
-    as_tibble(.name_repair = "minimal") %>%
-    pivot_longer(cols = everything(), names_to = "Metric", values_to = model_label)
+  # 3. Create Long Dataframe
+  metrics_df_long <- data.frame(
+    Metric = metric_names,
+    Value = numeric_values
+  )
+  
+  # Rename Value column to the model label
+  colnames(metrics_df_long)[2] <- model_label
   
   return(metrics_df_long)
 }
@@ -69,8 +76,7 @@ plot_classification_metrics <- function(df, model_name) {
 }
 ################################################################################
 Analysis1_Cycks_with_padding <- read_csv("Results3/Cycks_With_Padding.csv")
-Analysis1_raw_input_1 <- "Accuracy: 0.0298 | Balanced Acc: 0.0308 | Log Loss: 3.8865
-Precision: 0.0202 | Recall: 0.0298 | F1: 0.0156 | ROC-AUC: 0.5120"
+Analysis1_raw_input_1 <- "Accuracy: 0.0298 | Balanced Acc: 0.0308 | Log Loss: 3.8865 | Precision: 0.0202 | Recall: 0.0298 | F1: 0.0156 | ROC-AUC: 0.5120"
 
 Analysis1_df1 <- parse_metrics_to_df(Analysis1_raw_input_1,
                                      "Analysis1_Cycks_with_padding")
@@ -82,8 +88,7 @@ Analysis1_p1
 ################################################################################
 Analysis1_Cycks_without_padding <- read_csv("Results3/Cycks_Without_Padding.csv")
 #View(Cycks_without_padding)
-Analysis1_raw_input_2 <- "Accuracy: 0.9135 | Balanced Acc: 0.8947 | Log Loss: 0.3991
-Precision: 0.9223 | Recall: 0.9135 | F1: 0.9110 | ROC-AUC: 0.9988"
+Analysis1_raw_input_2 <- "Accuracy: 0.9135 | Balanced Acc: 0.8947 | Log Loss: 0.3991 | Precision: 0.9223 | Recall: 0.9135 | F1: 0.9110 | ROC-AUC: 0.9988"
 
 # Using your existing function
 Analysis1_df2 <- parse_metrics_to_df(Analysis1_raw_input_2,
@@ -97,8 +102,7 @@ Analysis1_p2
 ################################################################################
 Analysis1_Vgg_without_padding <- read_csv("Results3/Vgg_without_padding.csv")
 
-Analysis1_raw_input_3 <- "Accuracy: 0.9511 | Balanced Acc: 0.9456 | Log Loss: 0.2339
-Precision: 0.9528 | Recall: 0.9511 | F1: 0.9512 | ROC-AUC: 0.9992"
+Analysis1_raw_input_3 <- "Accuracy: 0.9511 | Balanced Acc: 0.9456 | Log Loss: 0.2339 | Precision: 0.9528 | Recall: 0.9511 | F1: 0.9512 | ROC-AUC: 0.9992"
 
 
 # Using your existing function
@@ -113,8 +117,7 @@ Analysis1_p3
 Analysis1_Vgg_with_padding <- read_csv("Results3/Vgg_with_padding.csv")
 # View(Vgg_with_padding)
 
-Analysis1_raw_input_4 <- "Accuracy: 0.9578 | Balanced Acc: 0.9518 | Log Loss: 0.2025
-Precision: 0.9592 | Recall: 0.9578 | F1: 0.9579 | ROC-AUC: 0.9994"
+Analysis1_raw_input_4 <- "Accuracy: 0.9578 | Balanced Acc: 0.9518 | Log Loss: 0.2025 | Precision: 0.9592 | Recall: 0.9578 | F1: 0.9579 | ROC-AUC: 0.9994"
 
 
 # Using your existing function
@@ -122,73 +125,65 @@ Analysis1_df4 <- parse_metrics_to_df(Analysis1_raw_input_4,
                                      "Analysis1_Vgg_with_padding")
 print(Analysis1_df4)
 Analysis1_p4 <- plot_classification_metrics(Analysis1_Vgg_without_padding,
-                                            "Analysis1_Vgg_without_padding")
+                                            "Analysis1_Vgg_with_padding")
 Analysis1_p4
 ################################################################################
 Analysis1_red_cycks_without_padding <- read_csv("Results3/red_cycks_without_padding.csv")
 # View(red_cycks_without_padding)
 
-red_cycks_without_padding_Plot <- plot_classification_metrics(red_cycks_without_padding,
-                                                     "red_cycks_without_padding")
-red_cycks_without_padding_Plot
+Analysis1_raw_input_5 <- "Accuracy: 0.9578 | Balanced Acc: 0.9518 | Log Loss: 0.2025 |Precision: 0.9592 | Recall: 0.9578 | F1: 0.9579 | ROC-AUC: 0.9994"
 
-red_cycks_without_padding_metrics <- data.frame(
-  Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
-             "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  red_cycks_without_padding = c(0.9726, 0.9607, 0.0808, 0.9744, 0.9726, 0.9724,
-                          0.9999)
-)
 
-# 2. View the data set
-print(red_cycks_without_padding_metrics)
+# Using your existing function
+Analysis1_df5 <- parse_metrics_to_df(Analysis1_raw_input_5,
+                                     "Analysis1_red_cycks_without_padding")
+print(Analysis1_df5)
+Analysis1_p5 <- plot_classification_metrics(Analysis1_red_cycks_without_padding,
+                                            "Analysis1_red_cycks_without_padding")
+Analysis1_p5
 ################################################################################
-red_cycks_with_padding <- read_csv("Results3/red_cycks_with_padding.csv")
-# View(red_cycks_with_padding)
-red_cycks_with_padding_Plot <- plot_classification_metrics(red_cycks_with_padding,
-                                                                  "red_cycks_with_padding")
-red_cycks_with_padding_Plot
+Analysis1_red_cycks_with_padding <- read_csv("Results3/red_cycks_with_padding.csv")
 
-red_cycks_with_padding_metrics <- data.frame(
-  Metric = c("Accuracy", "Balanced Accuracy", "Log Loss", 
-             "Precision", "Recall", "F1-Score", "ROC-AUC"),
-  red_cycks_with_padding = c(0.9726, 0.9607, 0.0808, 0.9744, 0.9726, 0.9724,
-                          0.9999)
-)
+Analysis1_raw_input_6 <- "Accuracy: 0.9726 | Balanced Acc: 0.9607 | Log Loss: 0.0808 | Precision: 0.9744 | Recall: 0.9726 | F1: 0.9724 | ROC-AUC: 0.9999"
 
-# 2. View the data set
-print(red_cycks_with_padding_metrics)
 
+# Using your existing function
+Analysis1_df6 <- parse_metrics_to_df(Analysis1_raw_input_6,
+                                     "Analysis1_red_cycks_with_padding")
+print(Analysis1_df6)
+Analysis1_p6 <- plot_classification_metrics(Analysis1_red_cycks_with_padding,
+                                            "Analysis1_red_cycks_with_padding")
+Analysis1_p6
 
 ################################################################################
 list_of_dfs <- list(
-  red_cycks_with_padding_metrics,
-  red_cycks_without_padding_metrics,
-  Vgg_with_padding_metrics,
-  Vgg_without_padding_metrics,
-  Cycks_with_padding_metrics,
-  Cycks_without_padding_metrics
+  Analysis1_df1,
+  Analysis1_df2,
+  Analysis1_df3,
+  Analysis1_df4,
+  Analysis1_df5,
+  Analysis1_df6
 )
 
 # 2. Merge all data frames by the "Metric" column
-combined_metrics <- Reduce(function(x, y) merge(x, y, by = "Metric",
+Analysis1_combined_metrics <- Reduce(function(x, y) merge(x, y, by = "Metric",
                                                 all = TRUE), list_of_dfs)
 
-# 3. View the final dataset
-print(combined_metrics)
-View(combined_metrics)
-# Optional: Save for external use
-# write.csv(combined_metrics, "all_model_comparison.csv", row.names = FALSE
-
-plot_data <- combined_metrics %>%
+# 1. Reshape
+plot_data <- Analysis1_combined_metrics %>%
   pivot_longer(
     cols = -Metric, 
     names_to = "Model", 
     values_to = "Value"
   )
 
-# 2. Filter for metrics on the 0-1 scale for better visualization
+# 2. Filter using the EXACT names from your dataframe (Check for underscores!)
+# We use !Metric %in% to handle multiple variations safely
 performance_metrics <- plot_data %>% 
-  filter(Metric != "Log Loss")
+  filter(!Metric %in% c("Log_Loss", "Log Loss"))
+
+# DEBUG: If this prints 0, your 'Metric' column names are different
+print(paste("Rows found for performance plot:", nrow(performance_metrics)))
 
 # 3. Create the grouped bar plot
 ggplot(performance_metrics, aes(x = Metric, y = Value, fill = Model)) +
@@ -199,21 +194,31 @@ ggplot(performance_metrics, aes(x = Metric, y = Value, fill = Model)) +
   theme_minimal() +
   labs(
     title = "Comparison of Model Performance Metrics",
-    subtitle = "Accuracy, Precision, Recall, F1, and AUC (Excluding Log Loss)",
+    subtitle = "Accuracy, Precision, Recall, F1, and AUC",
     x = "Performance Metric",
     y = "Score (0 to 1)",
     fill = "Model Architecture"
   ) +
-  scale_y_continuous(limits = c(0, 1.1)) +
+  scale_y_continuous(limits = c(0, 1.2)) + # Increased limit to fit vertical text
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_brewer(palette = "Set2")
 
-# 4. Optional: Plot Log Loss separately (since lower is better and scale is different)
-log_loss_data <- plot_data %>% filter(Metric == "Log Loss")
+# 4. Plot Log Loss separately
+log_loss_data <- plot_data %>% 
+  filter(Metric %in% c("Log_Loss", "Log Loss"))
+
+# DEBUG: If this prints 0, check View(plot_data) to see the exact spelling
+print(paste("Rows found for Log Loss plot:", nrow(log_loss_data)))
 
 ggplot(log_loss_data, aes(x = reorder(Model, Value), y = Value, fill = Model)) +
   geom_bar(stat = "identity") +
+  geom_text(aes(label = sprintf("%.2f", Value)), vjust = -0.5) +
   theme_minimal() +
-  labs(title = "Model Comparison: Log Loss", subtitle = "Lower values indicate better probabilistic predictions", x = "Model", y = "Log Loss") +
+  labs(title = "Model Comparison: Log Loss", 
+       subtitle = "Lower values indicate better probabilistic predictions", 
+       x = "Model", y = "Log Loss") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   guides(fill = "none")
+
+output_file <-output_file <- "~/Desktop/PgdThesis/codes/Analysis/CombinedAnalysis/Analysis1_combined_metrics.csv"
+write_csv(Analysis1_combined_metrics, output_file)
