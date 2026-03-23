@@ -1,4 +1,6 @@
-setwd("~/Desktop/PgdThesis/codes/Analysis/Analysis1")
+# setwd("~/Desktop/PgdThesis/codes/Analysis/Analysis1")
+setwd("D:/Projects/PgdThesis/codes/Analysis/Analysis1")
+
 libs <- c("dplyr", "magrittr", "ggplot2", "readr", "caret", "tidyr", "GGally",
           "survival", "data.table",  "plotly", "lubridate", "tidyverse")
 
@@ -169,6 +171,30 @@ list_of_dfs <- list(
 Analysis1_combined_metrics <- Reduce(function(x, y) merge(x, y, by = "Metric",
                                                 all = TRUE), list_of_dfs)
 
+
+Analysis1_Final_metrics <- Analysis1_combined_metrics %>%
+  pivot_longer(
+    cols = -Metric, 
+    names_to = "Model_Config", 
+    values_to = "Score"
+  )%>%
+  mutate(Experiment_Number = "One") %>%
+  relocate(Experiment_Number) #
+
+
+
+View(Analysis1_Final_metrics)
+output_file <- "~/Desktop/PgdThesis/codes/Analysis/CombinedAnalysis/Analysis1_combined_metrics.csv"
+write_csv(Analysis1_combined_metrics, output_file)
+
+
+
+
+
+
+
+
+
 # 1. Reshape
 plot_data <- Analysis1_combined_metrics %>%
   pivot_longer(
@@ -220,5 +246,4 @@ ggplot(log_loss_data, aes(x = reorder(Model, Value), y = Value, fill = Model)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   guides(fill = "none")
 
-output_file <-output_file <- "~/Desktop/PgdThesis/codes/Analysis/CombinedAnalysis/Analysis1_combined_metrics.csv"
-write_csv(Analysis1_combined_metrics, output_file)
+

@@ -3,7 +3,8 @@
 # ==============================================================================
 
 # 1. Setup Environment
-setwd("~/Desktop/PgdThesis/codes/Analysis/Analysis2")
+# setwd("~/Desktop/PgdThesis/codes/Analysis/Analysis2")
+setwd("D:/Projects/PgdThesis/codes/Analysis/Analysis2")
 
 # Define and Load Libraries
 libs <- c("dplyr", "magrittr", "ggplot2", "readr", "caret", "tidyverse", 
@@ -133,7 +134,26 @@ list_of_dfs <- list(Analysis0_df1,
                     Analysis0_df6)
 
 # Merge all into one table
-Analysis0_combined_metrics <- Reduce(function(x, y) merge(x, y, by = "Metric", all = TRUE), list_of_dfs)
+Analysis0_combined_metrics <- Reduce(function(x, y) merge(x, y, by = "Metric",
+                                                          all = TRUE),
+                                     list_of_dfs)
+
+View(Analysis0_combined_metrics)
+# 2. Convert to Long
+# We use -Metric to say "pivot everything EXCEPT the Metric column"
+Analysis0_Final_metrics <- Analysis0_combined_metrics %>%
+  pivot_longer(
+    cols = -Metric, 
+    names_to = "Model_Config", 
+    values_to = "Score"
+  )%>%
+  mutate(Experiment_Number = "Zero") %>%
+  relocate(Experiment_Number) #
+View(Analysis0_Final_metrics)
+
+
+output_file <- "D:/Projects/PgdThesis/codes/Analysis/CombinedAnalysis/Analysis0_Final_metrics.csv"
+write_csv(Analysis0_Final_metrics, output_file)
 
 # --- FIX FOR PRECISION NA ISSUE ---
 # Standardize names to ensure rows collapse correctly
