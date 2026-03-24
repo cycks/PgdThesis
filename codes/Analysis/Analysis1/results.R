@@ -91,7 +91,6 @@ Analysis1_p1
 Analysis1_Cycks_without_padding <- read_csv("Results3/Cycks_Without_Padding.csv")
 #View(Cycks_without_padding)
 Analysis1_raw_input_2 <- "Accuracy: 0.9135 | Balanced Acc: 0.8947 | Log Loss: 0.3991 | Precision: 0.9223 | Recall: 0.9135 | F1: 0.9110 | ROC-AUC: 0.9988"
-
 # Using your existing function
 Analysis1_df2 <- parse_metrics_to_df(Analysis1_raw_input_2,
                                      "Analysis1_Cycks_without_padding")
@@ -184,66 +183,11 @@ Analysis1_Final_metrics <- Analysis1_combined_metrics %>%
 
 
 View(Analysis1_Final_metrics)
-output_file <- "~/Desktop/PgdThesis/codes/Analysis/CombinedAnalysis/Analysis1_combined_metrics.csv"
-write_csv(Analysis1_combined_metrics, output_file)
+output_file <- "D:/Projects/PgdThesis/codes/Analysis/CombinedAnalysis/Analysis1_Final_metrics.csv"
+write_csv(Analysis1_Final_metrics, output_file)
 
 
 
 
-
-
-
-
-
-# 1. Reshape
-plot_data <- Analysis1_combined_metrics %>%
-  pivot_longer(
-    cols = -Metric, 
-    names_to = "Model", 
-    values_to = "Value"
-  )
-
-# 2. Filter using the EXACT names from your dataframe (Check for underscores!)
-# We use !Metric %in% to handle multiple variations safely
-performance_metrics <- plot_data %>% 
-  filter(!Metric %in% c("Log_Loss", "Log Loss"))
-
-# DEBUG: If this prints 0, your 'Metric' column names are different
-print(paste("Rows found for performance plot:", nrow(performance_metrics)))
-
-# 3. Create the grouped bar plot
-ggplot(performance_metrics, aes(x = Metric, y = Value, fill = Model)) +
-  geom_bar(stat = "identity", position = position_dodge(width = 0.8)) +
-  geom_text(aes(label = sprintf("%.2f", Value)), 
-            position = position_dodge(width = 0.8), 
-            vjust = -0.5, size = 3, angle = 90, hjust = -0.1) +
-  theme_minimal() +
-  labs(
-    title = "Comparison of Model Performance Metrics",
-    subtitle = "Accuracy, Precision, Recall, F1, and AUC",
-    x = "Performance Metric",
-    y = "Score (0 to 1)",
-    fill = "Model Architecture"
-  ) +
-  scale_y_continuous(limits = c(0, 1.2)) + # Increased limit to fit vertical text
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Set2")
-
-# 4. Plot Log Loss separately
-log_loss_data <- plot_data %>% 
-  filter(Metric %in% c("Log_Loss", "Log Loss"))
-
-# DEBUG: If this prints 0, check View(plot_data) to see the exact spelling
-print(paste("Rows found for Log Loss plot:", nrow(log_loss_data)))
-
-ggplot(log_loss_data, aes(x = reorder(Model, Value), y = Value, fill = Model)) +
-  geom_bar(stat = "identity") +
-  geom_text(aes(label = sprintf("%.2f", Value)), vjust = -0.5) +
-  theme_minimal() +
-  labs(title = "Model Comparison: Log Loss", 
-       subtitle = "Lower values indicate better probabilistic predictions", 
-       x = "Model", y = "Log Loss") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  guides(fill = "none")
 
 
