@@ -81,6 +81,7 @@ Analysis2_df1 <- parse_metrics_to_df(Analysis2_raw_input_1,
 Analysis2_p1 <- plot_classification_metrics(Analysis2_Cycks_with_padding,
                                             "Analysis2_Cycks_With_Padding")
 Analysis2_p1
+View(Analysis2_df1)
 
 # Model 2: Cycks Without Padding
 Analysis2_Cycks_without_padding <- read_csv("Cycks_Without_Padding.csv")
@@ -167,10 +168,6 @@ Analysis2_combined_metrics_clean <- Analysis2_combined_metrics %>%
   )) %>%
   group_by(Metric) %>%
   summarise(across(everything(), ~ first(na.omit(.))), .groups = 'drop')
-
-
-
-
 
 
 View(Analysis2_Final_metrics)
