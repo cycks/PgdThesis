@@ -69,6 +69,50 @@ plot_classification_metrics <- function(df, model_name) {
   return(plot)
 }
 
+plot_model_performance <- function(df, model_name) {
+  
+  # 1. Sort the data by Score within the function for a cleaner look
+  df_sorted <- df %>% 
+    arrange(desc(Score)) %>%
+    mutate(Metric = factor(Metric, levels = Metric))
+  
+  # 2. Build the plot
+  p <- ggplot(df_sorted, aes(x = Metric, y = Score, fill = Metric)) +
+    geom_bar(stat = "identity", color = "black", alpha = 0.8) +
+    
+    # Add text labels on top of bars
+    geom_text(
+      aes(label = sprintf("%.4f", Score)), 
+      vjust = -0.5, 
+      size = 4, 
+      fontface = "bold"
+    ) +
+    
+    theme_minimal() +
+    # 'mako' is a great professional palette, but 'viridis' or 'plasma' also work well
+    scale_fill_viridis_d(option = "mako") + 
+    
+    labs(
+      title = paste("Model Performance:", model_name),
+      subtitle = "Overall metrics performance comparison",
+      x = "Metric",
+      y = "Score Value"
+    ) +
+    
+    # Ensure the Y-axis has room for the labels
+    scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+    
+    theme(
+      legend.position = "none",
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 11),
+      plot.title = element_text(face = "bold", size = 16),
+      panel.grid.major.x = element_blank() # Cleans up the vertical lines
+    )
+  
+  return(p)
+}
+
+
 # ==============================================================================
 # DATA IMPORT & INDIVIDUAL PROCESSING
 # ==============================================================================
@@ -81,7 +125,19 @@ Analysis2_df1 <- parse_metrics_to_df(Analysis2_raw_input_1,
 Analysis2_p1 <- plot_classification_metrics(Analysis2_Cycks_with_padding,
                                             "Analysis2_Cycks_With_Padding")
 Analysis2_p1
-View(Analysis2_df1)
+
+Analysis2_df1 <- Analysis2_df1 %>% 
+  mutate(Score = Analysis2_Cycks_With_Padding) %>%
+  arrange(desc(Score)) %>%
+  mutate(Metric = factor(Metric, levels = Metric))
+
+
+
+p1 <- plot_model_performance(Analysis2_df1, "Analysis 2 Cycks With Padding")
+print(p1)
+
+
+
 
 # Model 2: Cycks Without Padding
 Analysis2_Cycks_without_padding <- read_csv("Cycks_Without_Padding.csv")
@@ -91,6 +147,22 @@ Analysis2_df2 <- parse_metrics_to_df(Analysis2_raw_input_2,
 Analysis2_p2 <- plot_classification_metrics(Analysis2_Cycks_without_padding,
                                             "Analysis2_Cycks_Without_Padding")
 Analysis2_p2
+
+
+Analysis2_df2 <- Analysis2_df2 %>% 
+  mutate(Score = Analysis2_Cycks_Without_Padding) %>%
+  arrange(desc(Score)) %>%
+  mutate(Metric = factor(Metric, levels = Metric))
+
+
+
+p2 <- plot_model_performance(Analysis2_df2, "Analysis 2 Cycks Without Padding")
+print(p2)
+
+
+
+
+
 # Model 3: VGG Without Padding
 Analysis2_Vgg_without_padding <- read_csv("Vgg_without_padding.csv")
 Analysis2_raw_input_3 <- "Accuracy: 0.9580 | Balanced Acc: 0.9578 | Log Loss: 0.2283 | Precision: 0.9587 | Recall: 0.9580 | F1: 0.9581 | ROC-AUC: 0.9994"
@@ -99,6 +171,20 @@ Analysis2_df3 <- parse_metrics_to_df(Analysis2_raw_input_3,
 Analysis2_p3 <- plot_classification_metrics(Analysis2_Vgg_without_padding,
                                             "Analysis2_VGG_Without_Padding")
 Analysis2_p3
+
+Analysis2_df3 <- Analysis2_df3 %>% 
+  mutate(Score = Analysis2_VGG_Without_Padding) %>%
+  arrange(desc(Score)) %>%
+  mutate(Metric = factor(Metric, levels = Metric))
+
+
+
+p3 <- plot_model_performance(Analysis2_df3, "Analysis 2 VGG Without Padding")
+print(p3)
+
+
+
+
 # Model 4: VGG With Padding
 Analysis2_Vgg_with_padding <- read_csv("Vgg_with_padding.csv")
 Analysis2_raw_input_4 <- "Accuracy: 0.9525 | Balanced Acc: 0.9524 | Log Loss: 0.2470 | Precision: 0.9536 | Recall: 0.9525 | F1: 0.9525 | ROC-AUC: 0.9993"
@@ -107,6 +193,19 @@ Analysis2_df4 <- parse_metrics_to_df(Analysis2_raw_input_4,
 Analysis2_p4 <- plot_classification_metrics(Analysis2_Vgg_with_padding,
                                             "Analysis2_VGG_With_Padding")
 Analysis2_p4
+
+
+Analysis2_df4 <- Analysis2_df4 %>% 
+  mutate(Score = Analysis2_VGG_With_Padding) %>%
+  arrange(desc(Score)) %>%
+  mutate(Metric = factor(Metric, levels = Metric))
+
+
+
+p4 <- plot_model_performance(Analysis2_df4, "Analysis 2 VGG With Padding")
+print(p4)
+
+
 # Model 5: Red Cycks Without Padding
 Analysis2_Red_cycks_without_padding <- read_csv("Red_cycks_without_padding.csv")
 Analysis2_raw_input_5 <- "Accuracy: 0.9641 | Balanced Acc: 0.9648 | Log Loss: 0.1158 | Precision: 0.9671 | Recall: 0.9641 | F1: 0.9642 | ROC-AUC: 0.9999"
