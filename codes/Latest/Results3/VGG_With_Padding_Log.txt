@@ -1,0 +1,127 @@
+Loading datasets from: /workspace/data/komnet2
+Found 43056 files belonging to 52 classes.
+Using 34445 files for training.
+Found 43056 files belonging to 52 classes.
+Using 8611 files for validation.
+
+--- MODEL ARCHITECTURE SUMMARY ---
+Model: "VGG_Face_With_Padding"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ conv2d (Conv2D)                      │ (None, 256, 256, 64)        │           1,792 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv2d_1 (Conv2D)                    │ (None, 256, 256, 64)        │          36,928 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling2d (MaxPooling2D)         │ (None, 128, 128, 64)        │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv2d_2 (Conv2D)                    │ (None, 128, 128, 128)       │          73,856 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv2d_3 (Conv2D)                    │ (None, 128, 128, 128)       │         147,584 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling2d_1 (MaxPooling2D)       │ (None, 64, 64, 128)         │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ flatten (Flatten)                    │ (None, 524288)              │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense (Dense)                        │ (None, 1024)                │     536,871,936 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 1024)                │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 52)                  │          53,300 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 537,185,396 (2.00 GB)
+ Trainable params: 537,185,396 (2.00 GB)
+ Non-trainable params: 0 (0.00 B)
+
+Starting Training...
+Epoch 1/10
+1077/1077 - 139s - 130ms/step - accuracy: 0.6837 - loss: 1.3433 - val_accuracy: 0.9372 - val_loss: 0.2530
+Epoch 2/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9411 - loss: 0.2249 - val_accuracy: 0.9462 - val_loss: 0.2284
+Epoch 3/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9641 - loss: 0.1320 - val_accuracy: 0.9504 - val_loss: 0.2203
+Epoch 4/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9762 - loss: 0.0876 - val_accuracy: 0.9526 - val_loss: 0.1979
+Epoch 5/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9826 - loss: 0.0674 - val_accuracy: 0.9563 - val_loss: 0.2139
+Epoch 6/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9849 - loss: 0.0604 - val_accuracy: 0.9518 - val_loss: 0.2364
+Epoch 7/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9887 - loss: 0.0459 - val_accuracy: 0.9541 - val_loss: 0.2265
+Epoch 8/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9894 - loss: 0.0422 - val_accuracy: 0.9553 - val_loss: 0.2412
+Epoch 9/10
+1077/1077 - 83s - 77ms/step - accuracy: 0.9904 - loss: 0.0373 - val_accuracy: 0.9580 - val_loss: 0.2115
+Epoch 10/10
+1077/1077 - 82s - 76ms/step - accuracy: 0.9899 - loss: 0.0391 - val_accuracy: 0.9578 - val_loss: 0.2030
+Saved accuracy/loss plots to VGG_With_Padding_Accuracy_Loss.png
+
+========================================
+      DETAILED PERFORMANCE METRICS
+========================================
+Accuracy: 0.9578 | Balanced Acc: 0.9518 | Log Loss: 0.2025
+Precision: 0.9592 | Recall: 0.9578 | F1: 0.9579 | ROC-AUC: 0.9994
+
+Classification Report:
+              precision    recall  f1-score   support
+
+       user1       0.98      0.98      0.98       172
+      user10       1.00      0.96      0.98       179
+      user11       0.98      0.98      0.98       198
+      user12       0.96      0.98      0.97       168
+      user13       0.94      0.96      0.95       174
+      user14       0.95      0.95      0.95       178
+      user15       0.88      0.90      0.89        48
+      user16       0.97      0.95      0.96       159
+      user17       0.98      0.94      0.96       178
+      user18       0.92      0.97      0.94       169
+      user19       0.96      0.94      0.95       174
+       user2       0.94      0.98      0.96       170
+      user20       0.97      0.58      0.72        50
+      user21       0.98      0.93      0.96       181
+      user22       0.99      0.96      0.98       172
+      user23       0.91      0.93      0.92       181
+      user24       0.95      0.97      0.96       167
+      user25       0.96      0.96      0.96       179
+      user26       0.95      0.93      0.94       134
+      user27       0.99      0.98      0.98       204
+      user28       0.94      0.96      0.95       156
+      user29       0.97      0.97      0.97       187
+       user3       0.97      0.94      0.95       176
+      user30       1.00      0.96      0.98       161
+      user31       0.97      0.93      0.95       193
+      user32       0.96      0.96      0.96       164
+      user33       0.95      0.97      0.96       173
+      user34       0.98      0.92      0.95       181
+      user35       0.96      0.97      0.96       156
+      user36       0.97      0.99      0.98       157
+      user37       0.99      0.97      0.98       172
+      user38       0.97      0.97      0.97       154
+      user39       0.82      0.93      0.87       160
+       user4       0.99      0.97      0.98       174
+      user40       0.98      0.99      0.99       179
+      user41       0.97      0.98      0.97       179
+      user42       0.94      0.93      0.93       167
+      user43       0.99      0.98      0.99       176
+      user44       0.93      0.96      0.95       176
+      user45       0.96      0.96      0.96       187
+      user46       0.97      0.94      0.96       160
+      user47       0.96      0.97      0.97       168
+      user48       0.99      0.95      0.97       149
+      user49       0.96      0.98      0.97       171
+       user5       0.96      0.94      0.95       179
+      user50       0.95      0.95      0.95       160
+      user51       0.97      0.98      0.97       176
+      user52       0.96      0.95      0.95       166
+       user6       0.97      0.98      0.98       186
+       user7       0.77      0.97      0.86       111
+       user8       0.95      0.97      0.96       157
+       user9       0.95      0.98      0.96       165
+
+    accuracy                           0.96      8611
+   macro avg       0.96      0.95      0.95      8611
+weighted avg       0.96      0.96      0.96      8611
+
+Saved ROC plot to VGG_With_Padding_ROC.png
+
+All results saved. Check VGG_With_Padding_Log.txt, VGG_With_Padding_Accuracy_Loss.png, and VGG_With_Padding_ROC.png

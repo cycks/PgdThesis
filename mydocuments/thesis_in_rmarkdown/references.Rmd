@@ -1,0 +1,201 @@
+---
+title: \textbf{Examining The Effect of Padding on Facial Recognition Using Convolution Neural Networks}
+output:
+  pdf_document:
+    number_sections: TRUE
+    keep_tex: TRUE
+    fig_caption: TRUE
+    latex_engine: xelatex
+geometry: "left = 2.54cm, right = 2.54cm, top = 2.54cm, bottom = 2.54cm"
+fontsize: 12pt
+header-includes:
+  - \usepackage{float}
+  - \usepackage{sectsty}
+  - \usepackage{paralist}
+  - \usepackage{setspace}
+  - \setstretch{2.0}
+  - \usepackage{titlesec}
+  - \usepackage{fancyhdr}
+  - \usepackage{ragged2e}
+  - \usepackage{lastpage}
+  - \usepackage{dcolumn}
+  - \usepackage{natbib}\bibliographystyle{agsm}
+  - \usepackage[nottoc, numbib]{tocbibind}
+  - \usepackage{enumitem}
+  - \renewcommand{\theequation}{\thechapter.\arabic{equation}}
+documentclass: report
+---
+
+\titleformat{\section}[block]{\normalfont\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{0pt}{0pt}
+# References{-}
+\vspace{-3em}
+
+Agrawal, A. K., Singh, N. Y. (2015). Evaluation of Face Recognition Methods in \hangindent=40pt Unconstrained Environments. International Conference on Intelligent Computing, Communication & Convergence. Bhubaneswar, Odisha, India.
+
+Alrasheedi, F., Zhong, X., & Huang, P.C. (2023). Padding Module: Learning the 
+\hangindent=40pt Padding in Deep Neural Networks. IEEE Access, 11, 7348-7357.
+
+Astawa, I. N. G. A., Putra, I. K. G. D., Sudarma, M., and Hartati, R. S. (2020). KomNET: \hangindent=40pt Face Image Dataset from Various Media for Face Recognition. Data in Brief, 31(105677): 1-5.
+
+Ayad, W., Qays, S., Perera g. A., and Al-Naji, A. (2023). Facial Recognition Databases: \hangindent=40pt Recent Developments and Review of Methods. Journal of Techniques, 5(4): 95-104.
+
+Celiktutan, O., Ulukaya, S., and Sankur, B. (2013). A Comparative Study of Face \hangindent=40pt Landmarking Techniques. EURASIP Journal on Image and Video Processing, 3(2013).
+
+Chen, L., Mark, H., Lin, J., and Han, C. (2001). Why Recognition in A Statistics-Based \hangindent=40pt Face Recognition System Should be based on The Pure Face Portion: A Probabilistic Decision-	Based Proof. Pattern Recognition, 34 (2001): 1393-1403.
+
+Da Silva I. N. Hernane Spatti D. Andrade Flauzino R. Liboni L. H. B. & Dos Reis 
+\hangindent=40pt Alves S. F. (2017). Artificial Neural Networks: A Practical Course. Springer International Publishing: Imprint: Springer.
+
+Dupuis, E., Novo, D., O’Connor, I., and Bosio, A. (2021). CNN Weight Sharing Based on a \hangindent=40pt Fast Accuracy Estimation Metric. Retrieved from: https://hal.science/hal-03257748/document. Retrieved on 7 January, 2023.
+
+Finlayson G. D. (2018). Colour and Illumination in Computer Vision. Interface 
+\hangindent=40pt focus, 8(4), 20180008.
+
+Finlayson, G., and Fredembach, C. (2007). Detecting Illumination in Images. 
+\hangindent=40pt Retrieved from: https://www.cs.sfu.ca/~mark/ftp/Iccv07/iccv07.pdf. Retrieved on: 3 September, 2023.
+
+Ghimire, D., and Lee, J. (2016).  Geometric Feature-Based Facial Expression Recognition \hangindent=40pt in Image Sequences Using Multi-Class AdaBoost and Support Vector Machines. Sensors, 13(6): 7714–7734.
+
+Gupta, D. (2017). Comparative Evaluation of Deep Architectures for Face 
+\hangindent=40pt Recognition in Unconstrained Environment (FRUE). International Journal of Advanced Research and Engineering, 6(9): 1353-1360
+
+He, L.; He, L.; Peng, L. (2023) CFormerFaceNet: Efficient Lightweight Network 
+\hangindent=40pt Merging a CNN and Transformer for Face Recognition. Appl. Sci. 13(6506): 1-14.
+
+Hidayat, R., Wibowo, B, M., Satria, R. B., Winursito, A. (2021). Implementation
+\hangindent=40pt of Face Recognition Using Geometric Features Extraction. Jurnal Lmiah Kursor, 11(2): 83-90. 
+
+Hinton, E. G., Osindero, O., and Teh, Y. (2006). A Fast Learning Algorithm for 
+\hangindent=40pt Deep Belief Nets. Neural Computation, 18(7): 1527-54.
+
+Hosseini, H., Xiao, B., Jaiswal, M., and Poovendran R. (2017). On the Limitation
+\hangindent=40pt of Convolutional Neural Networks in Recognizing Negative Images. Retrieved from: https://arxiv.org/pdf/1703.06857.pdf Retrieved on: 29 October, 2023.
+
+Ibrahem, H. M., and Abdulameer, H. M. (2023). Age Face Invariant Recognition 
+\hangindent=40pt Model Based On VGG Face Based DNN And Support Vector Classifier. International Journal on “Technical and Physical Problems of Engineering. 54(15): 232-240.
+
+Kapil, D., and Jain A. (2013). A Brief Review on Feature Based Approaches for 
+\hangindent=40pt Face Recognition. International Journal of Science and Research, 6(14): 273-27.
+
+Koo, H. J., Cho, W. S., Baek, R. N., Kim, C. M., and Park, R. K. (2018). 
+\hangindent=40pt CNN-Based Multimodal Human Recognition in Surveillance Environments. Sensors 18(3040): 2-34
+
+Koodalsamy, B., Bairavan, V., Narayanasamy, V. (2023). Face Recognition using Deep \hangindent=40pt Learning. International Conference on Smart Engineering for Renewable Energy Technologies (n.p.). Rajapalayam, India. https://doi.org/10.1051/e3sconf/202338705001. Retrieved on: 29 October, 2023.
+
+Nguyen, A.D., Choi, S., Kim, W., Ahn, S., Kim, J., & Lee, S. (2019). Distribution 
+\hangindent=40pt Padding in 	Convolutional Neural Networks. In 2019 IEEE International Conference on Image Processing (ICIP) (pp. 4275-4279).
+
+Ortiz, E. G., & Becker, B. C. (2014). Face recognition for web-scale datasets. 
+\hangindent=40pt Computer Vision and Image Understanding, 118, 153–170.
+
+Parkhi, M, O., Vedaldi, A., and Zisserman, A. (2015). Deep Face Recognition. Retrieved \hangindent=40pt from: https://www.robots.ox.ac.uk/~vgg/publications/2015/Parkhi15/parkhi15.pdf. Retrieved on: 9 September, 2024.
+
+Proyecto, F., C. (2010). Face Recognition Algorithms. University of the Basque
+\hangindent=40pt Country. Retrieved from:  https://www.ehu.eus/ccwintco/uploads/e/eb/PFC-IonMarques.pdf. Retrieved on: 3 September, 2023.
+
+Ranjan, A., Behera, N. J., and Reza. M. (2020). A Parallel Approach for Real-Time Face
+\hangindent=40pt Recognition from a Large Database. Retrieved from: https://arxiv.org/pdf/2011.00443.pdf. Retrieved on: 3 September, 2023.
+
+Reddy, M. D., & Reddy, S. N. (2019). Effects of Padding on LSTMS and CNNS. Retrieved \hangindent=40pt from: https://arxiv.org/abs/1903.07288. Retrieved on: 28 August, 2024.
+
+Rio, L. A., Martin, M., Perera-Lluna, A., & Saidi, R. (2020). Effect Of Sequence
+\hangindent=40pt Padding On The Performance of Deep Learning Models in Archaeal Protein Functional Prediction. 	Scientific Reports, 10(14634): n.p.
+
+Roza, D., and Mohsen S. (2021). Artificial Neural Network Systems. International
+\hangindent=40pt Journal of Imaging and Robotics, 21(2):13-25.
+
+Rusia, K. M., Singh K. D. (2023). A Comprehensive Survey on Techniques to Handle
+\hangindent=40pt Face Identity Threats: Challenges and Opportunities. Multimedia
+Tools and Applications (2023) 82:1669–1748.
+
+Shah, A., Shinde, S., Kadam, E., Shah, H., Shingade, S. (2016). Deep Residual
+\hangindent=40pt Networks with Exponential Linear Unit. Retrieved from: https://arxiv.org/pdf/1604.04112.pdf. Retrieved on: 1 February, 2024
+
+Shalini, T., Jabbar, A. S., Vamsi, S, T., Prakash, B. P., Kalyan, S. Y. (2023).
+\hangindent=40pt Face Recognition Based Attendance System Using CNN Architecture. International Journal for Innovative Engineering and Management Research, 12(4):
+232-238.
+
+Schroff, F., Kalenichecnko, D., and Philbin, J. (2015). FaceNet: A Unified 
+\hangindent=40pt Embedding for Face Recognition and Clustering. Retrieved from: https://arxiv.org/pdf/1503.03832. Retrieved on 15 September, 2024.
+
+Singh, M., Chawla, M., Singh, R., Vatsa, M., & Chellappa, R. (2019). Disguised
+\hangindent=40pt Faces in the Wild 2019. In 2019 IEEE/CVF International Conference on Computer Vision Workshop (ICCVW) (pp. 542-550).
+
+Singh, M., Singh, R., Vasta, M., Ratha, N., and Chellappa, R. (2018). Recognizing \hangindent=40pt Disguised Faces in The Wild. IEEE Transactions on Biometrics,
+Behavior, and Identity Science, 1(2): 97-108.
+
+Singh, S., and Prasad, S. (2018). Techniques and Challenges of Recognition: A
+\hangindent=40pt Critical Review. 8th International Conference on Advances in Computing and Communication. Rajagiri School of Engineering & Technology, Kochi, India. 143 (2018) 536–543.
+
+Struc, v. and Pavesic, N. (2009). A Case Study on Appearance Based Feature
+\hangindent=40pt Extraction Techniques and Their Susceptibility to Image Degradations for the Task of Face Recognition. World 	Academy of Science, Engineering and Technology, 30(2009): 806-814.
+
+Sun, Q., and Redei A. (2022). Knock Knock, Who’s There: Facial Recognition using \hangindent=40pt CNN-based Classifiers. International Journal of Advanced Computer Science and Applications, 13(1): 9-16.
+
+Tang, H., Ortis, A., & Battiato, S. (2019). The Impact of Padding on Image
+\hangindent=40pt Classification by 	Using 	Pre-trained Convolutional Neural Networks. In E. Ricci, S. Rota Bulò, C. Snoek, O. 	Lanz, S. Messelodi, & N. Sebe (Eds.),
+Image Analysis and Processing -- ICIAP 2019 (pp. 	337–344). Cham: Springer
+International Publishing.
+
+Tarnate, J. M., Devaraj, M., and Goma, C, J. (2020). Overcoming the Vanishing Gradient \hangindent=40pt Problem of Recurrent Neural Networks in The Iso 9001 Quality Management Audit Reports Classification. International Journal of Scientific and Technology Research, 9(3): 6683- 6686
+
+The World Economic Forum. (2023). Future of Jobs Report. Retrieved from:  
+\hangindent=40pt https://www3.weforum.org/docs/WEF_Future_of_Jobs_2023.pdf. Retrieved on: 12 September, 2023.
+
+Vicario, G., and Coleman, S. (2018). A Review of Data Science in Business and Industry \hangindent=40pt and a Future Review. Applied Stochastic Models in Business and Industry, 36(1), 6-18.
+
+Viegas, M. A., Simoes, R., Thanekar, N., Barnerjee, S., Dicholkar, R. (2019). Different \hangindent=40pt Approaches of Face Recognition. International Journal of Engineering Research & Technology, 8(6): 	933-934.
+
+Wang, D., Wang, H., Sun, J., Xin, J, and Luo, Y. (2021). Face Recognition in Complex 
+\hangindent=40pt Unconstrained Environment with an Enhanced WWN Algorithm. Journal of Intelligent Systems, 2022(30): 18-39.
+
+Wu, Z., Xiamixiding, R. Sjjanhar, A., Chen, J., and Wen, Q. (2018). Image \hangindent=40pt Appearance-Based Facial Expression Recognition. International Journal of Image and Graphics 18(2): 1 -12.
+
+Xiaobo, Q., Chenxu, W., Ying, S., Hui, Q., Kaige, D., and Xiaobin, W. (2023). A \hangindent=40pt Convolutional Neural Network Face Recognition Method Based on BiLSTM and Attention Mechanism. Computational Intelligence and Neuroscience, 2023(2501022): 1-14.
+
+Yan, Y., Lee, F., Wu, X., and Chen, Q. (2018). Face Recognition Algorithm Using Extended \hangindent=40pt Vector Quantization Histogram Features. PLos One 13(1): n.p.
+
+Yang, M., Kriegman, D, J., Ahuja, N. (2002). Detecting Faces in Images: A Survey. IEEE 
+\hangindent=40pt Transactions on Pattern Analysis and Machine Intelligence, 24(1): 1-25.
+
+Zhang, X., Xv, C., Shen, M., He, X., and Du, W. (2018). Survey of Convolutional Neural \hangindent=40pt Network. Advances in Intelligent Systems Research, 147(2018): 93-97.
+
+Zhang, Z., Hu, R., and Hu, W. (2022). Application of Artificial Neural Network Algorithm \hangindent=40pt in Facial Biological Image Information Scanning and Recognition. Contrast Media & Molecular Imaging, 2022(1142682): n.p. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
