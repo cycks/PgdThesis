@@ -1,0 +1,1 @@
+scp -P 35900 cycks_*.py root@217.138.104.235:/workspace/

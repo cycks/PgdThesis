@@ -7,11 +7,22 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
 from sklearn.metrics import (
-    classification_report, accuracy_score, precision_score, recall_score, 
-    f1_score, confusion_matrix, roc_auc_score, log_loss, balanced_accuracy_score,
+    classification_report, precision_score, recall_score, 
+    f1_score, roc_auc_score, log_loss, balanced_accuracy_score,
     roc_curve, auc
 )
 from sklearn.preprocessing import label_binarize
+
+# --- 1. GPU MEMORY MANAGEMENT ---
+# Prevent TensorFlow from grabbing all VRAM at once
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        print("GPU Memory Growth Enabled")
+    except RuntimeError as e:
+        print(f"Memory Growth Error: {e}")
 
 # --- LOGGING SYSTEM ---
 log_file_path = "Cycks_Without_Padding_Log.txt"
@@ -32,9 +43,9 @@ class DualLogger(object):
 sys.stdout = DualLogger(log_file_path)
 
 # --- Configuration ---
-folder_with_data = '/workspace/data/komnet2' 
+folder_with_data = '/workspace/data/komnet' 
 image_size = (256, 256)
-batch_size = 32
+batch_size = 16  # REDUCED from 32 to fix OOM
 
 # --- Load datasets ---
 print(f"Loading datasets from {folder_with_data}...")
@@ -59,13 +70,21 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 class_names = train_ds.class_names
 num_classes = len(class_names)
 
-# Normalization & Prefetching
+# --- 2. OPTIMIZED DATA PIPELINE ---
+# Rescaling and Caching (Cache after mapping, before prefetch)
 normalization_layer = layers.Rescaling(1./255)
-train_ds = train_ds.map(lambda x, y: (normalization_layer(x), y)).cache().prefetch(tf.data.AUTOTUNE)
-val_ds = val_ds.map(lambda x, y: (normalization_layer(x), y)).cache().prefetch(tf.data.AUTOTUNE)
+
+train_ds = train_ds.map(lambda x, y: (normalization_layer(x), y), 
+                        num_parallel_calls=tf.data.AUTOTUNE)
+train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=tf.data.AUTOTUNE)
+
+val_ds = val_ds.map(lambda x, y: (normalization_layer(x), y), 
+                      num_parallel_calls=tf.data.AUTOTUNE)
+val_ds = val_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
 
 # --- Model Definition (Padding='valid') ---
 def create_model(num_classes, input_shape=(256, 256, 3)):
+    tf.keras.backend.clear_session() # Clear any residual memory
     model = models.Sequential(name="Cycks_Without_Padding")
     # Block 1
     model.add(Conv2D(32, (3, 3), activation='relu', padding='valid', input_shape=input_shape))
@@ -131,7 +150,8 @@ def save_performance_plots(history):
     plt.legend(loc='upper right')
     
     plt.savefig('cycks_without_padding_accuracy_loss_plots.png')
-    print("Saved cycks_without_padding_accuracy_loss_plots.png")
+    plt.close() # Close to free memory
+    print("Saved accuracy/loss plots.")
 
 def save_roc_curve(y_true, y_probs, num_classes):
     y_true_bin = label_binarize(y_true, classes=range(num_classes))
@@ -158,7 +178,8 @@ def save_roc_curve(y_true, y_probs, num_classes):
     plt.title('ROC Curve: Cycks Without Padding')
     plt.legend(loc="lower right")
     plt.savefig('cycks_without_padding_roc_curve.png')
-    print("Saved cycks_without_padding_roc_curve.png")
+    plt.close()
+    print("Saved ROC curve plot.")
 
 # --- Custom Evaluation Function ---
 def comprehensive_evaluation(model, dataset, class_names):
@@ -168,6 +189,7 @@ def comprehensive_evaluation(model, dataset, class_names):
     
     y_true = []
     y_probs = []
+    # Evaluate in batches to avoid OOM during evaluation
     for images, labels in dataset:
         y_true.extend(labels.numpy())
         y_probs.append(model.predict(images, verbose=0))
@@ -192,7 +214,6 @@ def comprehensive_evaluation(model, dataset, class_names):
     print("\nClassification Report:")
     print(classification_report(y_true, y_pred, target_names=class_names))
     
-    # Save ROC plot
     save_roc_curve(y_true, y_probs, len(class_names))
 
 
@@ -204,10 +225,8 @@ print("\n--- MODEL ARCHITECTURE SUMMARY ---")
 model.summary()
 
 print("\nStarting Training...")
+# Train with reduced batch size
 history = model.fit(train_ds, validation_data=val_ds, epochs=10, verbose=2)
 
-# FIXED: Calling the correct function name defined above
 save_performance_plots(history)
-
-# Comprehensive Evaluation & ROC Plot
 comprehensive_evaluation(model, val_ds, class_names)

@@ -87,32 +87,32 @@ Model: "Cycks_With_Padding"
 
 Starting Training...
 Epoch 1/10
-1077/1077 - 79s - 74ms/step - accuracy: 0.0298 - loss: 4.0295 - val_accuracy: 0.0334 - val_loss: 3.9696
+1077/1077 - 122s - 113ms/step - accuracy: 0.0259 - loss: 3.9922 - val_accuracy: 0.0294 - val_loss: 3.9056
 Epoch 2/10
-1077/1077 - 46s - 42ms/step - accuracy: 0.0322 - loss: 3.8952 - val_accuracy: 0.0329 - val_loss: 3.8747
+1077/1077 - 75s - 70ms/step - accuracy: 0.0269 - loss: 3.9210 - val_accuracy: 0.0269 - val_loss: 3.9358
 Epoch 3/10
-1077/1077 - 46s - 42ms/step - accuracy: 0.0321 - loss: 3.8926 - val_accuracy: 0.0209 - val_loss: 3.9280
+1077/1077 - 75s - 70ms/step - accuracy: 0.0285 - loss: 3.9082 - val_accuracy: 0.0314 - val_loss: 3.8825
 Epoch 4/10
-1077/1077 - 46s - 43ms/step - accuracy: 0.0322 - loss: 3.8847 - val_accuracy: 0.0338 - val_loss: 3.8668
+1077/1077 - 76s - 70ms/step - accuracy: 0.0317 - loss: 3.8927 - val_accuracy: 0.0243 - val_loss: 3.9753
 Epoch 5/10
-1077/1077 - 46s - 43ms/step - accuracy: 0.0321 - loss: 3.8899 - val_accuracy: 0.0331 - val_loss: 3.8731
+1077/1077 - 76s - 70ms/step - accuracy: 0.0315 - loss: 3.8970 - val_accuracy: 0.0370 - val_loss: 3.8679
 Epoch 6/10
-1077/1077 - 46s - 43ms/step - accuracy: 0.0333 - loss: 3.8784 - val_accuracy: 0.0318 - val_loss: 3.8784
+1077/1077 - 76s - 70ms/step - accuracy: 0.0345 - loss: 3.8821 - val_accuracy: 0.0446 - val_loss: 3.8259
 Epoch 7/10
-1077/1077 - 46s - 43ms/step - accuracy: 0.0339 - loss: 3.8799 - val_accuracy: 0.0327 - val_loss: 3.8967
+1077/1077 - 76s - 70ms/step - accuracy: 0.0358 - loss: 3.8780 - val_accuracy: 0.0453 - val_loss: 3.8221
 Epoch 8/10
-1077/1077 - 46s - 42ms/step - accuracy: 0.0329 - loss: 3.8793 - val_accuracy: 0.0337 - val_loss: 3.8667
+1077/1077 - 76s - 71ms/step - accuracy: 0.0392 - loss: 3.8592 - val_accuracy: 0.0429 - val_loss: 3.8403
 Epoch 9/10
-1077/1077 - 46s - 43ms/step - accuracy: 0.0226 - loss: 3.9360 - val_accuracy: 0.0315 - val_loss: 3.8819
+1077/1077 - 76s - 70ms/step - accuracy: 0.0386 - loss: 3.8593 - val_accuracy: 0.0444 - val_loss: 3.8350
 Epoch 10/10
-1077/1077 - 46s - 43ms/step - accuracy: 0.0291 - loss: 3.9042 - val_accuracy: 0.0298 - val_loss: 3.8865
+1077/1077 - 76s - 70ms/step - accuracy: 0.0391 - loss: 3.8590 - val_accuracy: 0.0454 - val_loss: 3.8401
 Saved cycks_with_padding_accuracy_loss_plots.png
 
 ========================================
       DETAILED PERFORMANCE METRICS
 ========================================
-Accuracy: 0.0298 | Balanced Acc: 0.0308 | Log Loss: 3.8865
-Precision: 0.0202 | Recall: 0.0298 | F1: 0.0156 | ROC-AUC: 0.5120
+Accuracy: 0.0454 | Balanced Acc: 0.0464 | Log Loss: 3.8303
+Precision: 0.0397 | Recall: 0.0454 | F1: 0.0319 | ROC-AUC: 0.5281
 
 Classification Report:
               precision    recall  f1-score   support
@@ -142,7 +142,7 @@ Classification Report:
        user3       0.00      0.00      0.00       176
       user30       0.00      0.00      0.00       161
       user31       0.00      0.00      0.00       193
-      user32       0.00      0.00      0.00       164
+      user32       0.96      0.59      0.73       164
       user33       0.00      0.00      0.00       173
       user34       0.00      0.00      0.00       181
       user35       0.00      0.00      0.00       156
@@ -160,18 +160,18 @@ Classification Report:
       user46       0.00      0.00      0.00       160
       user47       0.00      0.00      0.00       168
       user48       0.00      0.00      0.00       149
-      user49       1.00      0.60      0.75       171
+      user49       0.91      0.81      0.86       171
        user5       0.00      0.00      0.00       179
       user50       0.00      0.00      0.00       160
       user51       0.00      0.00      0.00       176
       user52       0.00      0.00      0.00       166
        user6       0.00      0.00      0.00       186
        user7       0.00      0.00      0.00       111
-       user8       0.00      0.00      0.00       157
+       user8       0.17      0.01      0.01       157
        user9       0.00      0.00      0.00       165
 
-    accuracy                           0.03      8611
-   macro avg       0.02      0.03      0.02      8611
-weighted avg       0.02      0.03      0.02      8611
+    accuracy                           0.05      8611
+   macro avg       0.04      0.05      0.03      8611
+weighted avg       0.04      0.05      0.03      8611
 
 Saved roc_curve.png
